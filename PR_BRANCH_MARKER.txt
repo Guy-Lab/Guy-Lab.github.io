@@ -1,0 +1,1 @@
+Add standalone HTML, examples, and monitoring workflow
