@@ -1,0 +1,15 @@
+/* Basic styles for the combustion calculator */
+:root{--bg:#f7f7fb;--card:#fff;--accent:#d9534f;--muted:#666}
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,Arial,Helvetica,sans-serif;background:var(--bg);color:#111;margin:0;padding:24px}
+.container{max-width:900px;margin:0 auto;background:var(--card);padding:24px;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,.06)}
+h1{margin-top:0}
+button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+button#add-component{background:#2b8aef}
+.row{display:flex;gap:8px;align-items:center}
+.totals{margin-top:8px;font-weight:600}
+#components .component{display:flex;gap:8px;margin:8px 0}
+#components input[type=number]{width:80px;padding:6px}
+#components input[type=text]{flex:1;padding:6px}
+details{margin-top:12px}
+pre{background:#eee;padding:8px;border-radius:6px;overflow:auto}
