@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GMA026090711 — Calculateur de combustion</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>🔥 Calculateur de combustion</h1>
+
+    <section id="compose">
+      <h2>1. Composez votre mélange (%)</h2>
+      <p class="hint">⚠️ Les pourcentages saisis sont des <strong>fractions molaires (volumiques)</strong>. Les calculs en fractions massiques ne donneraient pas un résultat cohérent pour la stœchiométrie.</p>
+
+      <div id="components">
+        <!-- rows inserted here -->
+      </div>
+
+      <button id="add-component">+ Ajouter un composant</button>
+      <div class="totals">Total : <span id="total-percent">0</span>%</div>
+
+      <label for="quantite">Quantité du mélange</label>
+      <div class="row">
+        <select id="unit">
+          <option value="kg">kg</option>
+          <option value="Nm3">Nm³</option>
+          <option value="kWh">kWh</option>
+        </select>
+      </div>
+
+      <label>Conditions de référence (Impératif pour la conversion Nm³)</label>
+      <div class="refs">
+        <label><input type="radio" name="ref" value="273.15" checked> 0 °C (273.15 K) - 1 atm</label>
+        <label><input type="radio" name="ref" value="288.15"> 15 °C (288.15 K) - 1 atm</label>
+        <label><input type="radio" name="ref" value="298.15"> 25 °C (298.15 K) - 100 kPa</label>
+      </div>
+
+      <button id="calculate">Calculer le Bilan</button>
+    </section>
+
+    <section id="results">
+      <h2>Résultats</h2>
+
+      <h3>📊 Masse molaire moyenne du mélange</h3>
+      <p id="mean-molar-mass">—</p>
+
+      <h3>📏 Masse volumique (à la condition choisie)</h3>
+      <p id="density">—</p>
+
+      <h3>⚡ Énergie (sommaire)</h3>
+      <p id="energy">—</p>
+
+      <h3>💨 Air Requis (approche simplifiée)</h3>
+      <p id="air">—</p>
+
+      <h3>💧 Eau Produite (approximée)</h3>
+      <p id="water">—</p>
+
+      <h3>🌍 CO₂ Émis (approximée)</h3>
+      <p id="co2">—</p>
+
+      <details>
+        <summary>Débogage / données brutes</summary>
+        <pre id="debug">—</pre>
+      </details>
+    </section>
+
+    <footer class="credits">
+      <p>Site publié par Guy-Lab. Les calculs sont fournis à titre indicatif — vérifiez les données thermochimiques pour des usages industriels.</p>
+    </footer>
+  </main>
+
+  <script src="/assets/js/app.js" defer></script>
+</body>
+</html>

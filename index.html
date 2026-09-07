@@ -3,75 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Calculateur de combustion — Guy-Lab</title>
+  <title>Calculateur de combustion — Accueil</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>main{max-width:900px;margin:48px auto;background:#fff;padding:24px;border-radius:8px}</style>
 </head>
 <body>
-  <main class="container">
-    <h1>🔥 Calculateur de combustion</h1>
+  <main>
+    <h1>Guy‑Lab — Calculateur de combustion</h1>
+    <p>Bienvenue. Cette page sert d'accueil pour l'outil « Calculateur de combustion ». Vous pouvez :</p>
+    <ul>
+      <li><a href="/GMA026090711.html" id="run-link">Exécuter la page interactive</a></li>
+      <li><a href="/GMA026090711.html" download id="download-link">Télécharger la note de calcul (HTML)</a></li>
+    </ul>
 
-    <section id="compose">
-      <h2>1. Composez votre mélange (%)</h2>
-      <p class="hint">⚠️ Les pourcentages saisis sont des <strong>fractions molaires (volumiques)</strong>.</p>
+    <h2>À propos</h2>
+    <p>Le fichier <strong>GMA026090711.html</strong> contient la note de calcul et une interface interactive pour composer un mélange de gaz et obtenir un bilan simplifié (masse molaire, masse volumique, besoin d'air, production d'eau et CO₂, énergie approximative).</p>
 
-      <div id="components">
-        <!-- rows inserted here -->
-      </div>
+    <h3>Licence</h3>
+    <p>Ce projet est publié sous <strong>CC0 1.0 Universal (Public Domain)</strong>. Voir le fichier <a href="/LICENSE">LICENSE</a>.</p>
 
-      <button id="add-component">+ Ajouter un composant</button>
-      <div class="totals">Total : <span id="total-percent">0</span>%</div>
+    <h3>Fichiers</h3>
+    <ul>
+      <li><a href="/GMA026090711.html">GMA026090711.html — page interactive</a></li>
+      <li><a href="/README.md">README.md — informations et exemples</a></li>
+    </ul>
 
-      <label for="quantite">Quantité du mélange (unités de sortie)</label>
-      <div class="row">
-        <select id="unit">
-          <option value="kg">kg</option>
-          <option value="Nm3">Nm³</option>
-          <option value="kWh">kWh</option>
-        </select>
-      </div>
-
-      <label>Conditions de référence (Impératif pour la conversion Nm³)</label>
-      <div class="refs">
-        <label><input type="radio" name="ref" value="273.15" checked> 0 °C (273.15 K) - 1 atm</label>
-        <label><input type="radio" name="ref" value="288.15"> 15 °C (288.15 K) - 1 atm</label>
-        <label><input type="radio" name="ref" value="298.15"> 25 °C (298.15 K) - 100 kPa</label>
-      </div>
-
-      <button id="calculate">Calculer le Bilan</button>
-    </section>
-
-    <section id="results">
-      <h2>Résultats</h2>
-
-      <h3>📊 Masse molaire moyenne du mélange</h3>
-      <p id="mean-molar-mass">—</p>
-
-      <h3>📏 Masse volumique (à la condition choisie)</h3>
-      <p id="density">—</p>
-
-      <h3>⚡ Énergie (sommaire)</h3>
-      <p id="energy">—</p>
-
-      <h3>💨 Air Requis (approche simplifiée)</h3>
-      <p id="air">—</p>
-
-      <h3>💧 Eau Produite (approximée)</h3>
-      <p id="water">—</p>
-
-      <h3>🌍 CO₂ Émis (approximée)</h3>
-      <p id="co2">—</p>
-
-      <details>
-        <summary>Débogage / données brutes</summary>
-        <pre id="debug">—</pre>
-      </details>
-    </section>
-
-    <footer class="credits">
-      <p>Site publié par Guy-Lab. Les calculs sont fournis à titre indicatif — vérifiez les données thermochimiques pour des usages industriels.</p>
-    </footer>
+    <footer style="margin-top:24px;color:#666">Publié par Guy‑Lab — <a href="https://github.com/Guy-Lab/Guy-Lab.github.io">repo GitHub</a></footer>
   </main>
-
-  <script src="assets/js/app.js" defer></script>
 </body>
 </html>
