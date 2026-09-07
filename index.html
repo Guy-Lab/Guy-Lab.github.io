@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0073)file:///C:/Users/guyma/Downloads/deepseek_html_20260905_31a416%20(2).html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créateur de Mélange &amp; Calculateur de Combustion</title>
+    <title>Calculateur de combustion</title>
     <style>
         :root {
             --bg-color: #f4f7f6;
@@ -41,6 +41,14 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid var(--secondary-color);
+        }
+        .note {
+            background: #eef;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            border-radius: 4px;
         }
         .row-melange {
             display: flex;
@@ -118,7 +126,8 @@
         }
         .radio-group {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 10px;
         }
         .radio-group label {
@@ -127,10 +136,11 @@
             font-weight: normal;
             font-size: 0.9em;
             margin-top: 0;
+            cursor: pointer;
         }
         .radio-group input {
             width: auto;
-            margin-right: 5px;
+            margin-right: 10px;
         }
         .btn-calculer {
             width: 100%;
@@ -148,6 +158,21 @@
         .btn-calculer:hover {
             background-color: #219150;
         }
+        .btn-blabla {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .btn-blabla:hover {
+            background-color: #2980b9;
+        }
+        
         #resultats {
             display: none;
             margin-top: 30px;
@@ -174,27 +199,40 @@
             font-weight: bold;
             margin-top: 15px;
         }
+        
+        #blabla {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9em;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
 
-    <h1>🧪 Créateur de Mélange &amp; Combustion</h1>
+    <h1>🔥 Calculateur de combustion</h1>
     <div class="container">
 
         <!-- ÉTAPE 1 : CREATION DU MELANGE -->
         <div id="section-melange">
             <h2 style="font-size: 1.2em; margin-bottom: 15px;">1. Composez votre mélange (%)</h2>
             
-            <div id="liste-melange"><div class="row-melange">
-                <select onchange="majTotal()"><option value="H2">H2</option><option value="CH4" selected="">CH4</option><option value="C2H4">C2H4</option><option value="C2H6">C2H6</option><option value="C3H6">C3H6</option><option value="C3H8">C3H8</option><option value="C4H8">C4H8</option><option value="C4H10">C4H10</option><option value="C5H12">C5H12</option><option value="CO">CO</option><option value="O2">O2</option><option value="CO2">CO2</option><option value="N2">N2</option></select>
-                <input type="number" step="0.1" value="100" oninput="majTotal()">
-                <button onclick="supprimerLigne(this)">X</button>
-            </div></div>
+            <!-- Note importante -->
+            <div class="note">
+                ⚠️ Les pourcentages saisis sont des <strong>fractions molaires (volumiques)</strong>. Les calculs en fractions massiques ne donneraient pas un résultat cohérent pour la stœchiométrie.
+            </div>
 
-            <!-- CORRECTION ICI : Ajout de onclick="ajouterLigne()" -->
+            <div id="liste-melange"></div>
+
             <button id="btn-ajouter" onclick="ajouterLigne()">+ Ajouter un composant</button>
 
-            <div id="total-pourcentage" class="ok">Total : 100.0%</div>
+            <div id="total-pourcentage" class="attention">Total : 0%</div>
         </div>
 
         <!-- ÉTAPE 2 : CALCUL -->
@@ -203,228 +241,70 @@
             <input type="number" id="quantite" value="100" placeholder="Entrez une valeur">
             <select id="unite">
                 <option value="kg">kg</option>
-                <option value="Nm3">Nm³</option>
+                <!-- On sélectionne Nm3 par défaut -->
+                <option value="Nm3" selected>Nm³</option>
                 <option value="kWh">kWh</option>
             </select>
         </div>
 
-        <label>Conditions de Pression</label>
+        <!-- Définitions exactes des unités -->
+        <label>Conditions de référence (Impératif pour la conversion Nm³)</label>
         <div class="radio-group">
-            <label><input type="radio" name="pression" value="1" checked=""> 1 atm (101 325 Pa)</label>
-            <label><input type="radio" name="pression" value="2"> 1 bara (100 000 Pa)</label>
+            <label><input type="radio" name="pression" value="1" checked> 1 Nm³ = 1 m³ à 0°C sous 1 atm</label>
+            <label><input type="radio" name="pression" value="2"> 1 Nm³ = 1 m³ à 0°C sous 1 bara</label>
         </div>
 
         <button class="btn-calculer" onclick="calculer()">Calculer le Bilan</button>
+        <button class="btn-blabla" onclick="toggleBlaBla()">Bla bla (Références unités)</button>
 
-        <div id="resultats" style="display: block;">
+        <div id="blabla">
+<strong>Définitions des unités :</strong>
+- Pascal (Pa) : unité du système international (SI) pour mesurer la pression.
+- Bar : unité de pression qui équivaut à 100 000 Pa.
+- Absolute bar (bara) : unité de mesure de la pression qui équivaut à 100 000 Pa; mesurée à partir du vide, comme le pascal.
+- Bar gauge (barg) : unité de mesure de la pression qui équivaut à 100 000 Pa; mesurée à partir de la pression atmosphérique.
+- Atmosphère (atm) : équivaut à environ 101 325 Pa ou 1,01325 bara.
+- Normomètre cube (Nm³) : Volume de gaz de 1 m³ mesuré à des températures et pressions variables.
+  Norme IUPAC (1970) : 1 Nm³ = 1 m³ à une pression de 100 kPa et une température de 298,15K (25 °C)
+  Norme ISO2533 (1975) : 1 Nm³ = 1 m³ à une pression de 1 atm et une température de 288,15 K(15 °C)
+  Norme DIN1343 (1981) : 1 Nm³ = 1 m³ à une pression de 1 atm et une température de 273,15 K(0 °C)
+  Norme IUPAC (STP) (1980) : 1 Nm³ = 1 m³ à une pression de 100 kPa et une température de 273,15K (0 °C)
+  
+<strong>PCS & PCI</strong>
+Le PCS, Pouvoir Calorifique Supérieur, est la mesure de l'énergie potentielle de combustion d'un carburant.
+Le PCS représente 100% du potentiel thermique d'un générateur thermique à gaz.
+Au vingtième siècle, l'objectif d'avoir un rendement de 100% n'a pas été considéré comme un bon argument de vente pour la production de chaleur. On a créé le PCI, une mesure plus facilement accessible.
+Dans les faits, le PCI ne correspond à rien de physique, c'est une vue de l'esprit.
+On a maintenant des chaudières à condensation dont le rendement, mesuré par rapport au PCI, dépasse les 100%, ce qui est absurde techniquement, l'existence du PCI n'est donc pas une nécessité technique !
+Pour tout mélange de gaz, la différence entre PCS et PCI est une constante (à pression, volume et température constante); donc, lire le PCI c'est comme décaler le cadran de lecture du PCS pour avoir une mesure inférieure. La mesure est fausse, mais comme l'erreur est toujours la même, bien que tous les résultats ont un facteur d'erreur ils restent cohérents entre eux et cela permet de faire du commerce de combustibles.
+PCI = PCS - n * Lv
+La différence entre PCS et PCI réside dans la prise en compte ou non de la chaleur latente de vaporisation de l'eau.
+
+<strong>Calcul de la chaleur latente (Lv) pour 1 kg d'eau à 25°C sous 100 000 Pa :</strong>
+Température initiale : Ti = 25°C
+Température finale (ébullition) : Tf = 100°C
+Chauffage : Q_chauffage = 1 kg * 4.18 kJ/(kg·°C) * (100 - 25) = 313.5 kJ
+Vaporisation : Q_vaporisation = Lv = 2260 kJ/kg
+Énergie totale : Q_totale = 313.5 kJ + 2260 kJ = 2573.5 kJ
+<strong>Pour chauffer 1 kg d'eau de 25°C à 100°C et la vaporiser, il faut environ 2573.5 kJ d'énergie. On observe qu'il faut 313.5 kJ pour l'augmentation de chaleur et 2260 kJ pour la transition de phase qu'est la vaporisation.</strong>
+        </div>
+
+        <div id="resultats">
             <h2 style="text-align:center; font-size:1.2em; margin-top:0;">Résultats</h2>
             
+            <!-- Masse volumique du mélange -->
+            <div class="result-card" style="border-left-color: #f39c12;">
+                <h3>📊 Masse volumique du mélange</h3>
+                <p id="res-rho"></p>
+            </div>
+
             <div class="result-card">
                 <h3>⚡ Énergie</h3>
-                <p id="res-energie">0.00 kWh (PCS)</p>
+                <p id="res-energie"></p>
             </div>
 
             <div class="result-card">
                 <h3>💨 Air Requis</h3>
-                <p id="res-o2">0.00 kg de O₂</p>
-                <p id="res-air">0.00 kg d'air (≈ 0.00 Nm³)</p>
-            </div>
-
-            <div class="result-card">
-                <h3>💧 Eau Produite</h3>
-                <p id="res-h2o">0.00 kg de H₂O</p>
-            </div>
-
-            <div class="result-card" style="border-left-color: #e74c3c;">
-                <h3>🌍 CO₂ Émis</h3>
-                <p id="res-co2">0.00 kg de CO₂</p>
-                <p style="font-size: 0.9em; color: #555;" id="res-carbone">(Soit 0.00 kg de carbone)</p>
-            </div>
-        </div>
-        <div id="message-erreur" class="error"></div>
-
-    </div>
-
-    <script>
-        // ==========================================
-        // DONNÉES DES ESPÈCES
-        // ==========================================
-        const ESPECES = {
-            "H2":  { M: 2.016, PCS: 285.8, PCI: 241.8, nO2: 0.5, nCO2: 0, nH2O: 1 },
-            "CH4": { M: 16.043, PCS: 891.0, PCI: 802.3, nO2: 2, nCO2: 1, nH2O: 2 },
-            "C2H4":{ M: 28.054, PCS: 1411.0, PCI: 1323.0, nO2: 3, nCO2: 2, nH2O: 2 },
-            "C2H6":{ M: 30.070, PCS: 1560.0, PCI: 1428.0, nO2: 3.5, nCO2: 2, nH2O: 3 },
-            "C3H6":{ M: 42.081, PCS: 2058.0, PCI: 1926.0, nO2: 4.5, nCO2: 3, nH2O: 3 },
-            "C3H8":{ M: 44.097, PCS: 2220.0, PCI: 2043.0, nO2: 5, nCO2: 3, nH2O: 4 },
-            "C4H8":{ M: 56.108, PCS: 2718.0, PCI: 2542.0, nO2: 6, nCO2: 4, nH2O: 4 },
-            "C4H10":{M: 58.124, PCS: 2877.0, PCI: 2657.0, nO2: 6.5, nCO2: 4, nH2O: 5 },
-            "C5H12":{M: 72.151, PCS: 3509.0, PCI: 3241.0, nO2: 8, nCO2: 5, nH2O: 6 },
-            "CO":   { M: 28.010, PCS: 283.0, PCI: 283.0, nO2: 0.5, nCO2: 1, nH2O: 0 },
-            "O2":   { M: 32.000, PCS: 0, PCI: 0, nO2: 0, nCO2: 0, nH2O: 0 },
-            "CO2":  { M: 44.010, PCS: 0, PCI: 0, nO2: 0, nCO2: 0, nH2O: 0 },
-            "N2":   { M: 28.014, PCS: 0, PCI: 0, nO2: 0, nCO2: 0, nH2O: 0 }
-        };
-
-        const CONSTANTES = {
-            R: 8.314,
-            T: 273.15,
-            M_H2O: 18.015,
-            M_CO2: 44.010,
-            M_C: 12.011,
-            M_O2: 32.000,
-            O2_AIR: 0.2095
-        };
-
-        let melangeActuel = []; // Contient les composants ajoutés : {espece: "CH4", pourcentage: 100}
-
-        // Initialisation de l'interface
-        window.onload = function() {
-            // Ajoute une première ligne par défaut à 100%
-            ajouterLigne("CH4", 100);
-        };
-
-        // CORRECTION ICI : Si aucun paramètre n'est passé, on ajoute une ligne à 0%
-        function ajouterLigne(espece = "CH4", pourcentage = 0) {
-            let div = document.createElement("div");
-            div.className = "row-melange";
-            
-            let selectHTML = `<select onchange="majTotal()">`;
-            for (let nom in ESPECES) {
-                let selected = (nom === espece) ? "selected" : "";
-                selectHTML += `<option value="${nom}" ${selected}>${nom}</option>`;
-            }
-            selectHTML += `</select>`;
-
-            div.innerHTML = `
-                ${selectHTML}
-                <input type="number" step="0.1" value="${pourcentage}" oninput="majTotal()">
-                <button onclick="supprimerLigne(this)">X</button>
-            `;
-            document.getElementById('liste-melange').appendChild(div);
-            
-            // Stockage en mémoire
-            melangeActuel.push({ espece: espece, pourcentage: parseFloat(pourcentage) });
-            majTotal();
-        }
-
-        function supprimerLigne(btn) {
-            let div = btn.parentElement;
-            let index = Array.from(div.parentElement.children).indexOf(div);
-            melangeActuel.splice(index, 1);
-            div.remove();
-            majTotal();
-        }
-
-        function majTotal() {
-            let total = 0;
-            let lignes = document.querySelectorAll('.row-melange');
-            
-            // Mise à jour du tableau melangeActuel en fonction de l'UI
-            melangeActuel = [];
-            lignes.forEach(ligne => {
-                let espece = ligne.querySelector('select').value;
-                let pourcentage = parseFloat(ligne.querySelector('input').value) || 0;
-                melangeActuel.push({ espece, pourcentage });
-                total += pourcentage;
-            });
-
-            let divTotal = document.getElementById('total-pourcentage');
-            divTotal.innerText = `Total : ${total.toFixed(1)}%`;
-
-            if (Math.abs(total - 100) < 0.01) {
-                divTotal.className = "ok";
-            } else {
-                divTotal.className = total > 100 ? "erreur" : "attention";
-            }
-        }
-
-        // ==========================================
-        // LOGIQUE DE CALCUL
-        // ==========================================
-        function calculer() {
-            document.getElementById('message-erreur').innerText = "";
-            let total = 0;
-            melangeActuel.forEach(comp => total += comp.pourcentage);
-
-            // Vérification stricte des 100%
-            if (Math.abs(total - 100) > 0.01) {
-                document.getElementById('message-erreur').innerText = "Erreur : Le total du mélange doit être exactement à 100%.";
-                return;
-            }
-
-            let quantite = parseFloat(document.getElementById('quantite').value);
-            let unite = document.getElementById('unite').value;
-            let pressionChoice = document.querySelector('input[name="pression"]:checked').value;
-
-            if (isNaN(quantite) || quantite <= 0) {
-                document.getElementById('message-erreur').innerText = "Veuillez entrer une quantité valide.";
-                return;
-            }
-
-            // 1. Calcul des propriétés du mélange
-            let M = 0; // Masse molaire moyenne g/mol
-            let PCS = 0; // kJ/mol
-            let PCI = 0; // kJ/mol
-            let nH2O = 0;
-            let nO2 = 0, nCO2 = 0;
-
-            melangeActuel.forEach(comp => {
-                let x = comp.pourcentage / 100;
-                let espece = ESPECES[comp.espece];
-                M += x * espece.M;
-                PCS += x * espece.PCS;
-                PCI += x * espece.PCI;
-                nH2O += x * espece.nH2O;
-                nO2 += x * espece.nO2;
-                nCO2 += x * espece.nCO2;
-            });
-
-            // 2. Masse volumique selon pression
-            let P = (pressionChoice === "1") ? 101325 : 100000;
-            let rho = (M * P) / (CONSTANTES.R * CONSTANTES.T * 1000);
-
-            // 3. Conversion quantité en kg
-            let masseKg;
-            if (unite === "kg") {
-                masseKg = quantite;
-            } else if (unite === "Nm3") {
-                masseKg = quantite * rho;
-            } else if (unite === "kWh") {
-                let energieParKg = (PCS / M) * 1000; // kJ/kg
-                masseKg = (quantite * 3600) / energieParKg;
-            }
-
-            // 4. Calcul des moles de mélange
-            let molesMelange = (masseKg * 1000) / M;
-
-            // 5. Stœchiométrie (en moles)
-            let molesO2 = molesMelange * nO2;
-            let molesCO2 = molesMelange * nCO2;
-            let molesH2O = molesMelange * nH2O;
-
-            // 6. Masses (kg)
-            let masseO2 = (molesO2 * CONSTANTES.M_O2) / 1000;
-            let masseCO2 = (molesCO2 * CONSTANTES.M_CO2) / 1000;
-            let masseH2O = (molesH2O * CONSTANTES.M_H2O) / 1000;
-            let masseC = (molesCO2 * CONSTANTES.M_C) / 1000;
-
-            // 7. Énergie
-            let energieKWh = (molesMelange * PCS) / 3600;
-
-            // 8. Air requis
-            let masseAir = masseO2 / CONSTANTES.O2_AIR;
-            let volumeAirNm3 = masseAir / 1.293;
-
-            // 9. Affichage des résultats
-            document.getElementById('res-energie').innerText = `${energieKWh.toFixed(2)} kWh (PCS)`;
-            document.getElementById('res-o2').innerText = `${masseO2.toFixed(2)} kg de O₂`;
-            document.getElementById('res-air').innerText = `${masseAir.toFixed(2)} kg d'air (≈ ${volumeAirNm3.toFixed(2)} Nm³)`;
-            document.getElementById('res-h2o').innerText = `${masseH2O.toFixed(2)} kg de H₂O`;
-            document.getElementById('res-co2').innerText = `${masseCO2.toFixed(2)} kg de CO₂`;
-            document.getElementById('res-carbone').innerText = `(Soit ${masseC.toFixed(2)} kg de carbone)`;
-
-            document.getElementById('resultats').style.display = "block";
-        }
-    </script>
-
-</body></html>
+                <p id="res-o2"></p>
+                <p id="res-air"></p>
+                <p id="res-air-vol" style="font-size: 0.9em; color: #555;
